@@ -37,6 +37,16 @@ jobs:
         with:
           gradle-version: "8.14.3"
 
+      - name: Show build configuration
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "=== settings.gradle ==="
+          cat settings.gradle 2>/dev/null || true
+          echo "=== build.gradle ==="
+          cat build.gradle 2>/dev/null || true
+          echo "=== gradle.properties ==="
+          cat gradle.properties 2>/dev/null || true
+
       - name: Build
         working-directory: ${{ env.PROJECT_DIR }}
         run: gradle build --no-daemon
