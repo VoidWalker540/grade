@@ -17,10 +17,10 @@ jobs:
         run: |
           mkdir -p buildsrc
           unzip -q "modblocker-fabric-mod - Copy.zip" -d buildsrc
-          PROJECT_DIR="$(dirname "$(find "$GITHUB_WORKSPACE/buildsrc" -name gradlew -type f | head -1)")"
-          if [ -z "$PROJECT_DIR" ]; then
-            echo "Could not find gradlew in the ZIP."
-            find buildsrc -maxdepth 4 -type f | sort
+          PROJECT_DIR="$(dirname "$(find "$GITHUB_WORKSPACE/buildsrc" -name build.gradle -o -name build.gradle.kts | head -1)")"
+          if [ -z "$PROJECT_DIR" ] || [ "$PROJECT_DIR" = "." ]; then
+            echo "Could not find Gradle project."
+            find buildsrc -maxdepth 5 -type f | sort
             exit 1
           fi
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
@@ -32,11 +32,14 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+
       - name: Build
         working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          chmod +x gradlew
-          ./gradlew build --no-daemon
+        run: gradle build --no-daemon
 
       - name: Upload built JAR
         uses: actions/upload-artifact@v4
