@@ -8,23 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Extract project
-        run: |
-          mkdir -p buildsrc
-          unzip -q "modblocker-fabric-mod - Copy.zip" -d buildsrc
-          PROJECT_DIR="$(dirname "$(find "$GITHUB_WORKSPACE/buildsrc" -name build.gradle -o -name build.gradle.kts | head -1)")"
-          if [ -z "$PROJECT_DIR" ] || [ "$PROJECT_DIR" = "." ]; then
-            echo "Could not find Gradle project."
-            find buildsrc -maxdepth 5 -type f | sort
-            exit 1
-          fi
-          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
-          echo "Found project at: $PROJECT_DIR"
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -35,25 +21,14 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.14.3"
+          gradle-version: "8.14.1"
 
-      - name: Show build configuration
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: |
-          echo "=== settings.gradle ==="
-          cat settings.gradle 2>/dev/null || true
-          echo "=== build.gradle ==="
-          cat build.gradle 2>/dev/null || true
-          echo "=== gradle.properties ==="
-          cat gradle.properties 2>/dev/null || true
-
-      - name: Build
-        working-directory: ${{ env.PROJECT_DIR }}
+      - name: Build ModBlocker
         run: gradle build --no-daemon
 
-      - name: Upload built JAR
+      - name: Upload ModBlocker JAR
         uses: actions/upload-artifact@v4
         with:
           name: ModBlocker
-          path: ${{ env.PROJECT_DIR }}/build/libs/*.jar
+          path: build/libs/*.jar
           if-no-files-found: error
