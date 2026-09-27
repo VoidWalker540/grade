@@ -1,0 +1,27 @@
+{
+  "enabled": true,
+  "mode": "blacklist",
+  "kickMessage": "You have been disconnected: %reason%",
+  "logDetections": true,
+  "resourcePack": {
+    "enabled": false,
+    "url": "",
+    "sha1": "",
+    "required": true,
+    "prompt": "This server requires its resource pack."
+  },
+  "rules": [
+    {
+      "type": "ID",
+      "value": "examplemod:bad_channel",
+      "reason": "This client mod is not allowed.",
+      "enabled": true
+    },
+    {
+      "type": "REGEX",
+      "value": "(?i).*(wurst|meteor|baritone|freecam|xray).*",
+      "reason": "A blocked client mod/channel was detected.",
+      "enabled": false
+    }
+  ]
+}
