@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "modblocker",
+  "version": "${version}",
+  "name": "ModBlocker",
+  "description": "Server-side client mod and resource-pack blocking for Fabric.",
+  "authors": ["VirtuaVoid"],
+  "environment": "server",
+  "entrypoints": {
+    "server": ["com.virtuavoid.modblocker.ModBlocker"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "minecraft": "~1.21.11",
+    "fabric-api": ">=0.141.1+1.21.11",
+    "java": ">=21"
+  }
+}
